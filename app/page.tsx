@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Card, Flex, Heading, Theme } from '@radix-ui/themes'
+import { Button, Card, Flex, Heading, Spinner, Theme } from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
 import '@radix-ui/themes/styles.css'
 import { SerloEditor, SerloEditorProps, SerloRenderer } from '@serlo/editor'
@@ -107,12 +107,14 @@ function App() {
                 prompt,
               })
             }
+            disabled={fetchContent.isPending}
           >
             Generate Content with AI
           </Button>
         </FlexItem>
         <FlexItem>
           <Heading>Output of the generative AI</Heading>
+          {fetchContent.isPending ? <Spinner /> : null}
           <SerloRenderer document={outputContent} />
         </FlexItem>
         <FlexItem>
