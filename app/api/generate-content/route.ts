@@ -1,4 +1,4 @@
-import { jsonSchema } from './serlo-editor-content'
+import * as jsonSchema from '../../serlo-editor/content-type.json'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { OpenAI } from 'openai'
@@ -60,10 +60,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const openAIResponse = await openai.chat.completions.create({
       model,
       messages: [
-        {
-          role: 'system',
-          content: req.nextUrl.searchParams.get('prompt') ?? '',
-        },
+        { role: 'system', content: systemPrompt },
         ...(content == null
           ? []
           : [

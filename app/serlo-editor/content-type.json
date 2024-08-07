@@ -1,0 +1,265 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "CustomText": {
+            "description": "A custom text element that can be styled with different text styles.",
+            "properties": {
+                "code": {
+                    "const": true,
+                    "description": "Set to true if the text should be displayed in code like <code> in HTML.",
+                    "type": "boolean"
+                },
+                "em": {
+                    "const": true,
+                    "description": "Set to true if the text should be displayed in italic like <i> or <em> in HTML.",
+                    "type": "boolean"
+                },
+                "strong": {
+                    "const": true,
+                    "description": "Set to true if the text should be displayed in bold like <b> or <strong> in HTML.",
+                    "type": "boolean"
+                },
+                "text": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Heading": {
+            "description": "A heading similar to an h1, h2, h3, etc.",
+            "properties": {
+                "children": {
+                    "description": "The content of the heading.",
+                    "items": {
+                        "$ref": "#/definitions/SlateInline"
+                    },
+                    "type": "array"
+                },
+                "level": {
+                    "description": "The level of the heading. 1 is the highest level.\nUse 1 for h1, 2 for h2, etc.",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ],
+                    "type": "number"
+                },
+                "type": {
+                    "const": "h",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Link": {
+            "description": "A link similar to an <a> tag in HTML.",
+            "properties": {
+                "children": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/CustomText"
+                            },
+                            {
+                                "$ref": "#/definitions/MathElement"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "href": {
+                    "description": "The URL that the link points",
+                    "type": "string"
+                },
+                "type": {
+                    "const": "a",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ListItem": {
+            "description": "A list item similar to an <li> tag in HTML.",
+            "properties": {
+                "children": {
+                    "anyOf": [
+                        {
+                            "items": [
+                                {
+                                    "$ref": "#/definitions/ListItemText"
+                                }
+                            ],
+                            "maxItems": 1,
+                            "minItems": 1,
+                            "type": "array"
+                        },
+                        {
+                            "items": [
+                                {
+                                    "$ref": "#/definitions/ListItemText"
+                                },
+                                {
+                                    "$ref": "#/definitions/UnorderedList"
+                                }
+                            ],
+                            "maxItems": 2,
+                            "minItems": 2,
+                            "type": "array"
+                        },
+                        {
+                            "items": [
+                                {
+                                    "$ref": "#/definitions/ListItemText"
+                                },
+                                {
+                                    "$ref": "#/definitions/OrderedList"
+                                }
+                            ],
+                            "maxItems": 2,
+                            "minItems": 2,
+                            "type": "array"
+                        }
+                    ]
+                },
+                "type": {
+                    "const": "list-item",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ListItemText": {
+            "description": "A list item child which only contains text elements (similar to the body of an <li> tag in HTML).",
+            "properties": {
+                "children": {
+                    "items": {
+                        "$ref": "#/definitions/CustomText"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "const": "list-item-child",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "MathElement": {
+            "description": "A math element similar to a <math> tag in HTML.",
+            "properties": {
+                "children": {
+                    "items": {
+                        "$ref": "#/definitions/CustomText"
+                    },
+                    "type": "array"
+                },
+                "inline": {
+                    "description": "Set to true if the math element should be displayed inline like $...$ in LaTeX.\nSet to false if the math element should be displayed as a block like $$...$$ in LaTeX.",
+                    "type": "boolean"
+                },
+                "src": {
+                    "description": "The LaTeX source code of the math element.",
+                    "type": "string"
+                },
+                "type": {
+                    "const": "math",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "OrderedList": {
+            "description": "An ordered list similar to an <ol> tag in HTML.",
+            "properties": {
+                "children": {
+                    "items": {
+                        "$ref": "#/definitions/ListItem"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "const": "ordered-list",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Paragraph": {
+            "description": "A paragraph of text similar to a <p> tag in HTML.",
+            "properties": {
+                "children": {
+                    "description": "The content of the paragraph.",
+                    "items": {
+                        "$ref": "#/definitions/SlateInline"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "const": "p",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "SlateBlock": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/Paragraph"
+                },
+                {
+                    "$ref": "#/definitions/Heading"
+                },
+                {
+                    "$ref": "#/definitions/UnorderedList"
+                },
+                {
+                    "$ref": "#/definitions/OrderedList"
+                }
+            ]
+        },
+        "SlateInline": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/CustomText"
+                },
+                {
+                    "$ref": "#/definitions/MathElement"
+                },
+                {
+                    "$ref": "#/definitions/Link"
+                }
+            ]
+        },
+        "UnorderedList": {
+            "description": "An unordered list similar to an <ul> tag in HTML.",
+            "properties": {
+                "children": {
+                    "items": {
+                        "$ref": "#/definitions/ListItem"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "const": "unordered-list",
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "description": "A content type that can be used to store rich text content.",
+    "properties": {
+        "plugin": {
+            "const": "text",
+            "type": "string"
+        },
+        "state": {
+            "items": {
+                "$ref": "#/definitions/SlateBlock"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object"
+}
+

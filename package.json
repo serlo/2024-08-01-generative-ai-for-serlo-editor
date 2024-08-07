@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "generate": "ts-json-schema-generator --path tsconfig.json --type Paragraph --out schema.json",
     "format": "prettier --write .",
     "build": "next build",
     "start": "next start",
@@ -28,7 +29,8 @@
     "postcss": "^8",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-json-schema": "^0.64.0"
   },
   "packageManager": "yarn@4.3.1"
 }
