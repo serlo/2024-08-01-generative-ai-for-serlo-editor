@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "generate": "ts-json-schema-generator --path tsconfig.json --type Paragraph --out schema.json",
+    "generate": "yarn generate:json-schema && yarn format",
+    "generate:json-schema": "yarn typescript-json-schema app/serlo-editor/content-type.ts TextPlugin > app/serlo-editor/content-type.json",
     "format": "prettier --write .",
     "build": "next build",
     "start": "next start",
