@@ -1,4 +1,12 @@
-type ContentType = RichText | Box | Video | Geogebra
+type ContentType =
+  | RichText
+  | Box
+  | Video
+  | Geogebra
+  | Equations
+  | Highlight
+  | Image
+  | Multimedia
 
 /**
  * A list of content elements like boy, richtext or exercises...
@@ -93,6 +101,88 @@ interface EquationsState {
 interface Equations {
   plugin: 'equations'
   state: EquationsState
+}
+
+/**
+ * Represents the state of the Highlight plugin.
+ * @property code - The programming code.
+ * @property language - The programming language of the code.
+ * @property showLineNumbers - Option to show line numbers (similar to an IDE).
+ */
+interface HighlightState {
+  code: string
+  language: string
+  showLineNumbers: boolean
+}
+
+/**
+ * Represents the Highlight plugin.
+ * @property plugin - The type of plugin, which is "highlight".
+ * @property state - The state of the Highlight plugin.
+ */
+interface Highlight {
+  plugin: 'highlight'
+  state: HighlightState
+}
+
+/**
+ * Represents the state of a link associated with an image.
+ * @property href - The URL of the link.
+ * @property openInNewTab - Option to open the link in a new tab.
+ */
+interface ImageLink {
+  href: string
+  openInNewTab: boolean
+}
+
+/**
+ * Represents the state of the Image plugin.
+ * @property src - The URL to the image's location.
+ * @property link - Optional link that the image can be associated with.
+ * @property alt - Optional alternative information for the image if it cannot be viewed.
+ * @property maxWidth - Optional setting of the maximal width of the image.
+ * @property caption - Optional caption that can be added to the image.
+ */
+interface ImageState {
+  src: string
+  link?: ImageLink
+  alt?: string
+  maxWidth?: number
+  caption?: RichText
+}
+
+/**
+ * Represents the Image plugin.
+ * @property plugin - The type of plugin, which is "image".
+ * @property state - The state of the Image plugin.
+ */
+interface Image {
+  plugin: 'image'
+  state: ImageState
+}
+
+/**
+ * Represents the state of the Multimedia plugin.
+ * @property explanation - The left-hand side of the multimedia object, containing various content types.
+ * @property multimedia - The right-hand side of the multimedia object, containing either an image, a video, or a geogebra applet.
+ * @property illustrating - Indicates whether the multimedia object is illustrating the explanation.
+ * @property width - The width of the multimedia object.
+ */
+interface MultimediaState {
+  explanation: ListOfContent
+  multimedia: Image | Video | Geogebra
+  illustrating: boolean
+  width: number
+}
+
+/**
+ * Represents the Multimedia plugin.
+ * @property plugin - The type of plugin, which is "multimedia".
+ * @property state - The state of the Multimedia plugin.
+ */
+interface Multimedia {
+  plugin: 'multimedia'
+  state: MultimediaState
 }
 
 /**
