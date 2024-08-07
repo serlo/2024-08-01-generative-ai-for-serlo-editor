@@ -39,6 +39,21 @@
         },
         {
           "$ref": "#/definitions/Geogebra"
+        },
+        {
+          "$ref": "#/definitions/Equations"
+        },
+        {
+          "$ref": "#/definitions/Highlight"
+        },
+        {
+          "$ref": "#/definitions/Image"
+        },
+        {
+          "$ref": "#/definitions/Multimedia"
+        },
+        {
+          "$ref": "#/definitions/Spoiler"
         }
       ]
     },
@@ -61,6 +76,38 @@
           "type": "boolean"
         },
         "text": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Equations": {
+      "description": "Represents the Equations plugin.",
+      "properties": {
+        "plugin": {
+          "const": "equations",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/EquationsState"
+        }
+      },
+      "type": "object"
+    },
+    "EquationsState": {
+      "description": "Represents the state of the Equations plugin.",
+      "properties": {
+        "firstExplanation": {
+          "$ref": "#/definitions/RichText"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/definitions/Step"
+          },
+          "type": "array"
+        },
+        "transformationTarget": {
+          "enum": ["equation", "term"],
           "type": "string"
         }
       },
@@ -97,6 +144,79 @@
         },
         "type": {
           "const": "h",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Highlight": {
+      "description": "Represents the Highlight plugin.",
+      "properties": {
+        "plugin": {
+          "const": "highlight",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/HighlightState"
+        }
+      },
+      "type": "object"
+    },
+    "HighlightState": {
+      "description": "Represents the state of the Highlight plugin.",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "showLineNumbers": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "Image": {
+      "properties": {
+        "plugin": {
+          "const": "image",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/ImageState"
+        }
+      },
+      "type": "object"
+    },
+    "ImageLink": {
+      "description": "Represents the state of a link associated with an image.",
+      "properties": {
+        "href": {
+          "type": "string"
+        },
+        "openInNewTab": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "ImageState": {
+      "description": "Represents the state of the Image plugin.",
+      "properties": {
+        "alt": {
+          "type": "string"
+        },
+        "caption": {
+          "$ref": "#/definitions/RichText"
+        },
+        "link": {
+          "$ref": "#/definitions/ImageLink"
+        },
+        "maxWidth": {
+          "type": "number"
+        },
+        "src": {
           "type": "string"
         }
       },
@@ -235,6 +355,47 @@
       },
       "type": "object"
     },
+    "Multimedia": {
+      "description": "Represents the Multimedia plugin.",
+      "properties": {
+        "plugin": {
+          "const": "multimedia",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/MultimediaState"
+        }
+      },
+      "type": "object"
+    },
+    "MultimediaState": {
+      "description": "Represents the state of the Multimedia plugin.",
+      "properties": {
+        "explanation": {
+          "$ref": "#/definitions/ListOfContent"
+        },
+        "illustrating": {
+          "type": "boolean"
+        },
+        "multimedia": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Video"
+            },
+            {
+              "$ref": "#/definitions/Geogebra"
+            },
+            {
+              "$ref": "#/definitions/Image"
+            }
+          ]
+        },
+        "width": {
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "OrderedList": {
       "description": "An ordered list similar to an <ol> tag in HTML.",
       "properties": {
@@ -312,6 +473,52 @@
           "$ref": "#/definitions/Link"
         }
       ]
+    },
+    "Spoiler": {
+      "description": "Represents the Spoiler plugin.",
+      "properties": {
+        "plugin": {
+          "const": "spoiler",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/definitions/SpoilerState"
+        }
+      },
+      "type": "object"
+    },
+    "SpoilerState": {
+      "description": "Represents the state of the Spoiler plugin.",
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/ListOfContent"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Step": {
+      "description": "Represents a single transformation step in an equation.",
+      "properties": {
+        "explanation": {
+          "$ref": "#/definitions/RichText"
+        },
+        "left": {
+          "type": "string"
+        },
+        "right": {
+          "type": "string"
+        },
+        "sign": {
+          "type": "string"
+        },
+        "transform": {
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "UnorderedList": {
       "description": "An unordered list similar to an <ul> tag in HTML.",

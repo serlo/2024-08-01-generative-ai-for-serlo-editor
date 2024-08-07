@@ -7,6 +7,7 @@ type ContentType =
   | Highlight
   | Image
   | Multimedia
+  | Spoiler
 
 /**
  * A list of content elements like boy, richtext or exercises...
@@ -183,6 +184,26 @@ interface MultimediaState {
 interface Multimedia {
   plugin: 'multimedia'
   state: MultimediaState
+}
+
+/**
+ * Represents the state of the Spoiler plugin.
+ * @property title - The title of the spoiler.
+ * @property content - The content of the spoiler, which contains rows of text or other content types.
+ */
+interface SpoilerState {
+  title: string
+  content: ListOfContent
+}
+
+/**
+ * Represents the Spoiler plugin.
+ * @property plugin - The type of plugin, which is "spoiler".
+ * @property state - The state of the Spoiler plugin.
+ */
+interface Spoiler {
+  plugin: 'spoiler'
+  state: SpoilerState
 }
 
 /**
