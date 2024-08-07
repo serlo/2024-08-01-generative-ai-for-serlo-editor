@@ -25,11 +25,11 @@ To generate the educational content:
 6. If the schema includes optional fields, use your discretion to include them based on the relevance of the input JSON or the potential educational value.
 7. Generate content that is coherent, informative, and educational in nature.
 
-Your output should be a valid JSON object that conforms to the provided schema. Present your generated content within <output_json> tags.
+Your output should be a valid JSON object that conforms to the provided schema.
 
 If you encounter any conflicts between the schema requirements and the input JSON, prioritize adhering to the schema. If the input JSON is missing information required by the schema, use placeholder text or generate appropriate content to fill those fields.
 
-If the schema or input JSON contains errors or is invalid, explain the issue within <error> tags and provide suggestions for correction if possible.
+If the schema or input JSON contains errors or is invalid, explain the issue and provide suggestions for correction if possible.
 
 Remember to maintain a educational tone and focus throughout the generated content. Your goal is to create valuable learning material that fits the specified structure.`
 const contentPrompt = `Now, consider the input JSON:
