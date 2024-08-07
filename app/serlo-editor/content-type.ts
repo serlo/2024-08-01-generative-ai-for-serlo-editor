@@ -10,6 +10,85 @@ type ContentType =
   | Spoiler
   | Table
   | SerloInjection
+  | Exercise
+
+/**
+ * The exercise plugin combines the task description and the responses
+ */
+interface Exercise {
+  plugin: 'exercise'
+
+  state: {
+    /**
+     * The axtucal task / exercise
+     */
+    content: ListOfContent
+    /**
+     * The responses, either of type scMcExercise or inputExercise
+     */
+    interactive?: ScMcExercise
+  }
+}
+
+/**
+ * single or multiple choice exercise
+ */
+interface ScMcExercise {
+  plugin: 'scMcExercise'
+
+  /**
+   * The scmc exercise contains only the response part of the exercise (the task is a separate content)
+   */
+  state: {
+    /**
+     * single or multiple choice
+     */
+    isSingleChoice: false
+    /**
+     * multiple answers can be entered
+     */
+    answers: {
+      /**
+       * each answer contains a text content
+       */
+      content: RichText
+      /**
+       * flag whether answer is correct or false
+       */
+      isCorrect: false
+      /**
+       * text feedback for the user when this solution is selected
+       */
+      feedback: RichText
+    }[]
+  }
+}
+
+/**
+ * The solution of an exercise
+ */
+interface Solution {
+  plugin: 'solution'
+  state: {
+    /**
+     * prerequisites specified for understanding the exercise
+     */
+    prerequisite?: {
+      // id of the referenced Serlo article
+      id: string
+      // title of the referenced Serlo article
+      title: string
+    }
+    /**
+     * solution strategy described textually
+     */
+    strategy: RichText
+    /**
+     * the solution is structured into different steps where each step can contain text, images or other content types
+     */
+    steps: ListOfContent
+  }
+}
 
 /**
  * A list of content elements like boy, richtext or exercises...
