@@ -9,6 +9,7 @@ type ContentType =
   | Multimedia
   | Spoiler
   | Table
+  | SerloInjection
 
 /**
  * A list of content elements like boy, richtext or exercises...
@@ -16,6 +17,16 @@ type ContentType =
 interface ListOfContent {
   plugin: 'rows'
   state: ContentType[]
+}
+
+/**
+ * Represents the SerloInjection plugin.
+ * @property plugin - The type of plugin, which is "injection".
+ * @property state - The ID of the Serlo article that is injected.
+ */
+interface SerloInjection {
+  plugin: 'injection'
+  state: string
 }
 
 /**
