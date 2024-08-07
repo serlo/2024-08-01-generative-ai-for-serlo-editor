@@ -1,7 +1,104 @@
+type ContentType = RichText | Box | Video | Geogebra
+
+/**
+ * A list of content elements like boy, richtext or exercises...
+ */
+interface ListOfContent {
+  plugin: 'rows'
+  state: ContentType[]
+}
+
+/**
+ * A semantic box like an example, a definition, a theorem, a hint, etc.
+ */
+interface Box {
+  plugin: 'box'
+
+  state: {
+    // type of box: "blank", "example", "citation", "approach", etc.
+    type: string
+    // optional title for the box (see text plugin)
+    title: RichText
+    // a box can contain text, code, equations, image, multimedia content or a table
+    // any of the above is wrapped in a rows plugin
+    content: ListOfContent
+  }
+}
+
+/**
+ * A video element similar to <video> in HTML.
+ */
+interface Video {
+  plugin: 'video'
+  state: {
+    /**
+     * The url to the video's location
+     */
+    src: string
+    /**
+     * Alternative information for the video if the video cannot be viewed
+     */
+    alt: string
+  }
+}
+
+/**
+ * An integration from Geogebra hub.
+ */
+interface Geogebra {
+  plugin: 'geogebra'
+
+  /**
+   * Id of the geogebra applet
+   */
+  state: string
+}
+
+// TODO: Better types for the equation plugin
+// TODO: Define "left", "right", "sign", "transform" and "explanation" in the schema
+
+/**
+ * Represents a single transformation step in an equation.
+ * @property left - The left-hand side of the equation.
+ * @property sign - The sign between the left and right sides of the equation.
+ * @property right - The right-hand side of the equation.
+ * @property transform - The transformation applied to this step.
+ * @property explanation - An inline textual explanation of the step.
+ */
+interface Step {
+  left: string
+  sign: string
+  right: string
+  transform: string
+  explanation: RichText
+}
+
+/**
+ * Represents the state of the Equations plugin.
+ * @property steps - An array of steps, each containing the details of a transformation.
+ * @property firstExplanation - The first explanation rendered above the equation sign of the first step.
+ * @property transformationTarget - Indicates whether the "equation" or "term" is transformed.
+ */
+interface EquationsState {
+  steps: Step[]
+  firstExplanation: RichText
+  transformationTarget: 'equation' | 'term'
+}
+
+/**
+ * Represents the Equations plugin.
+ * @property plugin - The type of plugin, which is "equations".
+ * @property state - The state of the Equations plugin.
+ */
+interface Equations {
+  plugin: 'equations'
+  state: EquationsState
+}
+
 /**
  * A content type that can be used to store rich text content.
  */
-interface TextPlugin {
+interface RichText {
   plugin: 'text'
   state: SlateBlock[]
 }

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "generate": "yarn generate:json-schema && yarn format",
-    "generate:json-schema": "yarn typescript-json-schema app/serlo-editor/content-type.ts TextPlugin > app/serlo-editor/content-type.json",
+    "generate:json-schema": "yarn typescript-json-schema app/serlo-editor/content-type.ts ListOfContent > app/serlo-editor/content-type.json",
     "format": "prettier --write .",
     "build": "next build",
     "start": "next start",

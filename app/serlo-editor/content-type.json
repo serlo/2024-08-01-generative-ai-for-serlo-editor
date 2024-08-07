@@ -1,6 +1,47 @@
 {
+  "$ref": "#/definitions/ListOfContent",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "Box": {
+      "description": "A semantic box like an example, a definition, a theorem, a hint, etc.",
+      "properties": {
+        "plugin": {
+          "const": "box",
+          "type": "string"
+        },
+        "state": {
+          "properties": {
+            "content": {
+              "$ref": "#/definitions/ListOfContent"
+            },
+            "title": {
+              "$ref": "#/definitions/RichText"
+            },
+            "type": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "ContentType": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/RichText"
+        },
+        {
+          "$ref": "#/definitions/Box"
+        },
+        {
+          "$ref": "#/definitions/Video"
+        },
+        {
+          "$ref": "#/definitions/Geogebra"
+        }
+      ]
+    },
     "CustomText": {
       "description": "A custom text element that can be styled with different text styles.",
       "properties": {
@@ -20,6 +61,20 @@
           "type": "boolean"
         },
         "text": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Geogebra": {
+      "description": "An integration from Geogebra hub.",
+      "properties": {
+        "plugin": {
+          "const": "geogebra",
+          "type": "string"
+        },
+        "state": {
+          "description": "Id of the geogebra applet",
           "type": "string"
         }
       },
@@ -140,6 +195,22 @@
       },
       "type": "object"
     },
+    "ListOfContent": {
+      "description": "A list of content elements like boy, richtext or exercises...",
+      "properties": {
+        "plugin": {
+          "const": "rows",
+          "type": "string"
+        },
+        "state": {
+          "items": {
+            "$ref": "#/definitions/ContentType"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "MathElement": {
       "description": "A math element similar to a <math> tag in HTML.",
       "properties": {
@@ -197,6 +268,22 @@
       },
       "type": "object"
     },
+    "RichText": {
+      "description": "A content type that can be used to store rich text content.",
+      "properties": {
+        "plugin": {
+          "const": "text",
+          "type": "string"
+        },
+        "state": {
+          "items": {
+            "$ref": "#/definitions/SlateBlock"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "SlateBlock": {
       "anyOf": [
         {
@@ -241,20 +328,30 @@
         }
       },
       "type": "object"
-    }
-  },
-  "description": "A content type that can be used to store rich text content.",
-  "properties": {
-    "plugin": {
-      "const": "text",
-      "type": "string"
     },
-    "state": {
-      "items": {
-        "$ref": "#/definitions/SlateBlock"
+    "Video": {
+      "description": "A video element similar to <video> in HTML.",
+      "properties": {
+        "plugin": {
+          "const": "video",
+          "type": "string"
+        },
+        "state": {
+          "properties": {
+            "alt": {
+              "description": "Alternative information for the video if the video cannot be viewed",
+              "type": "string"
+            },
+            "src": {
+              "description": "The url to the video's location",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
       },
-      "type": "array"
+      "type": "object"
     }
   },
-  "type": "object"
+  "description": "A list of content elements like boy, richtext or exercises..."
 }
