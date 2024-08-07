@@ -54,6 +54,9 @@
         },
         {
           "$ref": "#/definitions/Spoiler"
+        },
+        {
+          "$ref": "#/definitions/Table"
         }
       ]
     },
@@ -516,6 +519,51 @@
         },
         "transform": {
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Table": {
+      "description": "Represents a table with rows and columns similar to <table> in HTML.",
+      "properties": {
+        "plugin": {
+          "const": "serloTable",
+          "type": "string"
+        },
+        "state": {
+          "properties": {
+            "rows": {
+              "items": [
+                {
+                  "properties": {
+                    "columns": {
+                      "items": [
+                        {
+                          "properties": {
+                            "content": {
+                              "$ref": "#/definitions/RichText"
+                            }
+                          },
+                          "type": "object"
+                        }
+                      ],
+                      "maxItems": 1,
+                      "minItems": 1,
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              ],
+              "maxItems": 1,
+              "minItems": 1,
+              "type": "array"
+            },
+            "tableType": {
+              "type": "string"
+            }
+          },
+          "type": "object"
         }
       },
       "type": "object"

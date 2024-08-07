@@ -8,6 +8,7 @@ type ContentType =
   | Image
   | Multimedia
   | Spoiler
+  | Table
 
 /**
  * A list of content elements like boy, richtext or exercises...
@@ -212,6 +213,29 @@ interface Spoiler {
 interface RichText {
   plugin: 'text'
   state: SlateBlock[]
+}
+
+/**
+ * Represents a table with rows and columns similar to <table> in HTML.
+ */
+interface Table {
+  plugin: 'serloTable'
+
+  // The Serlo Table is structured into rows where each row contains a column list. Each row-column entry is a text content.
+  state: {
+    rows: [
+      {
+        columns: [
+          {
+            content: RichText
+          },
+        ]
+      },
+    ]
+    // Specifies whether only column headers or
+    // only row headers or both are displayed
+    tableType: string
+  }
 }
 
 type SlateBlock = Paragraph | Heading | UnorderedList | OrderedList
