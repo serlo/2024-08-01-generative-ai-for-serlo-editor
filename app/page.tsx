@@ -64,7 +64,10 @@ function App() {
       prompt: string
     }) => {
       const response = await fetch(
-        `/api/generate-content?content=${encodeURIComponent(content)}&prompt=${encodeURIComponent(prompt)}&password=${password}&model=${model}`,
+        createUrl({
+          path: '/api/generate-content',
+          query: { content, prompt, password, model },
+        }),
         { method: 'POST' },
       )
 
@@ -168,3 +171,19 @@ function FlexItem({ children }: { children: React.ReactNode }) {
 }
 
 type Content = SerloEditorProps['initialState']
+
+function createUrl({
+  path,
+  query,
+}: {
+  path: string
+  query: Record<string, string>
+}) {
+  const url = new URL(path, window.location.href)
+
+  for (const [key, value] of Object.entries(query)) {
+    url.searchParams.set(key, value)
+  }
+
+  return url.toString()
+}
