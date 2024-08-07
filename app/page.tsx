@@ -66,7 +66,12 @@ function App() {
       const response = await fetch(
         createUrl({
           path: '/api/generate-content',
-          query: { content, prompt, password, model },
+          query: {
+            prompt,
+            password,
+            model,
+            ...(toText(content).trim().length > 0 ? { content } : {}),
+          },
         }),
         { method: 'POST' },
       )
@@ -88,6 +93,10 @@ function App() {
       <Flex gap="3" wrap="wrap">
         <FlexItem>
           <Heading>Input for the generative AI</Heading>
+          <p className="mt-2">
+            Enter content for generative AI in the following editor component.
+            Leave it empty when you do not want to send any text as an input:
+          </p>
           <SerloEditor
             initialState={inputContent}
             onChange={({ changed, getDocument }) => {
@@ -186,4 +195,18 @@ function createUrl({
   }
 
   return url.toString()
+}
+
+function toText(obj: unknown): string {
+  if (Array.isArray(obj)) {
+    return obj.map(toText).join('')
+  } else if (typeof obj === 'object' && obj != null) {
+    if ('text' in obj && typeof obj['text'] === 'string') {
+      return obj.text
+    }
+
+    return Object.values(obj).map(toText).join('')
+  } else {
+    return ''
+  }
 }
