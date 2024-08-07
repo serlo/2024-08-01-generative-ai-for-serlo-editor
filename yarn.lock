@@ -10,6 +10,7 @@ __metadata:
   resolution: "2024-07-21-getting-started-with-remirror@workspace:."
   dependencies:
     "@radix-ui/react-form": "npm:^0.1.0"
+    "@radix-ui/react-select": "npm:^2.1.1"
     "@radix-ui/themes": "npm:^3.1.1"
     "@serlo/editor": "npm:^0.10.0"
     "@tanstack/react-query": "npm:^5.51.21"
@@ -1076,7 +1077,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-select@npm:2.1.1":
+"@radix-ui/react-select@npm:2.1.1, @radix-ui/react-select@npm:^2.1.1":
   version: 2.1.1
   resolution: "@radix-ui/react-select@npm:2.1.1"
   dependencies:

@@ -1,6 +1,14 @@
 'use client'
 
-import { Button, Card, Flex, Heading, Spinner, Theme } from '@radix-ui/themes'
+import {
+  Button,
+  Card,
+  Flex,
+  Heading,
+  Select,
+  Spinner,
+  Theme,
+} from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
 import '@radix-ui/themes/styles.css'
 import { SerloEditor, SerloEditorProps, SerloRenderer } from '@serlo/editor'
@@ -16,6 +24,14 @@ const queryClient = new QueryClient()
 const initialState = {
   plugin: 'rows',
   state: [{ plugin: 'text' }],
+}
+
+enum Model {
+  GPT_3_5_TURBO = 'gpt-3.5-turbo',
+  GPT_4 = 'gpt-4',
+  GPT_4O = 'gpt-4o',
+  GPT_4_TURBO = 'gpt-4-turbo',
+  GPT_4O_MINI = 'gpt-4o-mini',
 }
 
 export default function Home() {
@@ -36,6 +52,7 @@ function App() {
   const [outputContent, setOutputContent] =
     React.useState<Content>(initialState)
   const [prompt, setPrompt] = React.useState('Vereinfache den Text')
+  const [model, setModel] = React.useState(Model.GPT_4O)
   const [backendResponse, setBackendResponse] = React.useState<unknown>(null)
 
   const fetchContent = useMutation({
@@ -47,7 +64,7 @@ function App() {
       prompt: string
     }) => {
       const response = await fetch(
-        `/api/generate-content?content=${encodeURIComponent(content)}&prompt=${encodeURIComponent(prompt)}&password=${password}`,
+        `/api/generate-content?content=${encodeURIComponent(content)}&prompt=${encodeURIComponent(prompt)}&password=${password}&model=${model}`,
         { method: 'POST' },
       )
 
@@ -99,6 +116,25 @@ function App() {
                 />
               </Form.Control>
             </Form.Field>
+            <Form.Field name="model" className="mt-2">
+              <Form.Label>Model:</Form.Label>
+              <Form.Control asChild>
+                <Select.Root defaultValue={model}>
+                  <Select.Trigger />
+                  <Select.Content>
+                    {Object.values(Model).map((model) => (
+                      <Select.Item
+                        value={model}
+                        onClick={() => setModel(model)}
+                        key={model}
+                      >
+                        {model}
+                      </Select.Item>
+                    ))}
+                  </Select.Content>
+                </Select.Root>
+              </Form.Control>
+            </Form.Field>
           </Form.Root>
           <Button
             onClick={() =>
@@ -108,6 +144,7 @@ function App() {
               })
             }
             disabled={fetchContent.isPending}
+            className="mt-2"
           >
             Generate Content with AI
           </Button>
