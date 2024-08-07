@@ -168,6 +168,7 @@ function App() {
         </FlexItem>
         <FlexItem>
           <Heading>Response from Backend</Heading>
+          {fetchContent.isPending ? <Spinner /> : null}
           <pre>{JSON.stringify(backendResponse, null, 2)}</pre>
         </FlexItem>
       </Flex>
