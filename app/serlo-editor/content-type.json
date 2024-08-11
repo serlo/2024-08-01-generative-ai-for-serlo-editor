@@ -138,6 +138,10 @@
             "interactive": {
               "$ref": "#/definitions/ScMcExercise",
               "description": "The responses, either of type scMcExercise or inputExercise"
+            },
+            "solution": {
+              "$ref": "#/definitions/Solution",
+              "description": "The solution of this exercise."
             }
           },
           "type": "object"
@@ -561,6 +565,41 @@
           "$ref": "#/definitions/Link"
         }
       ]
+    },
+    "Solution": {
+      "description": "The solution of an exercise",
+      "properties": {
+        "plugin": {
+          "const": "solution",
+          "type": "string"
+        },
+        "state": {
+          "properties": {
+            "prerequisite": {
+              "description": "prerequisites specified for understanding the exercise",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "steps": {
+              "$ref": "#/definitions/ListOfContent",
+              "description": "the solution is structured into different steps where each step can contain text, images or other content types"
+            },
+            "strategy": {
+              "$ref": "#/definitions/RichText",
+              "description": "solution strategy described textually"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
     },
     "Spoiler": {
       "description": "Represents the Spoiler plugin.",

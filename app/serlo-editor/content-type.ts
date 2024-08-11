@@ -24,6 +24,10 @@ interface Exercise {
      */
     content: ListOfContent
     /**
+     * The solution of this exercise.
+     */
+    solution: Solution
+    /**
      * The responses, either of type scMcExercise or inputExercise
      */
     interactive?: ScMcExercise
