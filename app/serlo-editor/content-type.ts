@@ -30,7 +30,7 @@ interface Exercise {
     /**
      * The responses, either of type scMcExercise or inputExercise
      */
-    interactive?: ScMcExercise | InputExercise
+    interactive?: ScMcExercise | InputExercise | BlankExercise
   }
 }
 
@@ -65,6 +65,27 @@ interface ScMcExercise {
        */
       feedback: RichText
     }[]
+  }
+}
+
+/**
+ * An exercise with blanks wich needs to be be filled out by the students with
+ * the correct answer. The blanks are given in the text by blanks in the rich text. This exerciser can
+ * e a fill ein the gap exercise when mode is "typing" and a drag and drop exercise when mode is
+ * "drag-and-drop".
+ */
+interface BlankExercise {
+  plugin: 'blanksExercise'
+  state: {
+    /** The text with the blanks */
+    text: RichText
+    /** The mode of the content type.
+     * Set to "typing" for fill in the gap exercise.
+     * Set to "drag-and-drop" for Drag & Drop Exercise
+     */
+    mode: 'typing' | 'drag-and-drop'
+    /** Optional list of extra draggable answers which are all wrong for a drag & drop exercise. */
+    extraDraggableAnswers?: { answer: string }[]
   }
 }
 
@@ -375,7 +396,37 @@ interface Table {
 }
 
 type SlateBlock = Paragraph | Heading | UnorderedList | OrderedList
-type SlateInline = CustomText | MathElement | Link
+type SlateInline = CustomText | MathElement | Link | Blank
+
+/**
+ * Represents a blank space in the editor in a blank exercise.
+ */
+interface Blank {
+  /**
+   * The type of the content, which must be 'textBlank'.
+   */
+  type: 'textBlank'
+
+  /**
+   * The children of the blank, which is the correct answer for this blank.
+   */
+  children: (CustomText | MathElement)[]
+
+  /**
+   * The unique identifier for the blank.
+   */
+  blankId: string
+
+  /**
+   * List of correct answers for this blank.
+   */
+  correctAnswer: { anser: string }[]
+
+  /**
+   * Optional: Specifies whether math equivalents are accepted.
+   */
+  acceptMathEquivalents?: boolean
+}
 
 /**
  * A heading similar to an h1, h2, h3, etc.

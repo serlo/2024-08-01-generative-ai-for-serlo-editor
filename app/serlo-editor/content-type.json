@@ -2,6 +2,87 @@
   "$ref": "#/definitions/ListOfContent",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "Blank": {
+      "description": "Represents a blank space in the editor in a blank exercise.",
+      "properties": {
+        "acceptMathEquivalents": {
+          "description": "Optional: Specifies whether math equivalents are accepted.",
+          "type": "boolean"
+        },
+        "blankId": {
+          "description": "The unique identifier for the blank.",
+          "type": "string"
+        },
+        "children": {
+          "description": "The children of the blank, which is the correct answer for this blank.",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/CustomText"
+              },
+              {
+                "$ref": "#/definitions/MathElement"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "correctAnswer": {
+          "description": "List of correct answers for this blank.",
+          "items": {
+            "properties": {
+              "anser": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": "textBlank",
+          "description": "The type of the content, which must be 'textBlank'.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BlankExercise": {
+      "description": "An exercise with blanks wich needs to be be filled out by the students with\nthe correct answer. The blanks are given in the text by blanks in the rich text. This exerciser can\ne a fill ein the gap exercise when mode is \"typing\" and a drag and drop exercise when mode is\n\"drag-and-drop\".",
+      "properties": {
+        "plugin": {
+          "const": "blanksExercise",
+          "type": "string"
+        },
+        "state": {
+          "properties": {
+            "extraDraggableAnswers": {
+              "description": "Optional list of extra draggable answers which are all wrong for a drag & drop exercise.",
+              "items": {
+                "properties": {
+                  "answer": {
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "mode": {
+              "description": "The mode of the content type.\nSet to \"typing\" for fill in the gap exercise.\nSet to \"drag-and-drop\" for Drag & Drop Exercise",
+              "enum": ["drag-and-drop", "typing"],
+              "type": "string"
+            },
+            "text": {
+              "$ref": "#/definitions/RichText",
+              "description": "The text with the blanks"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
     "Box": {
       "description": "A semantic box like an example, a definition, a theorem, a hint, etc.",
       "properties": {
@@ -142,6 +223,9 @@
                 },
                 {
                   "$ref": "#/definitions/InputExercise"
+                },
+                {
+                  "$ref": "#/definitions/BlankExercise"
                 }
               ],
               "description": "The responses, either of type scMcExercise or inputExercise"
@@ -620,6 +704,9 @@
         },
         {
           "$ref": "#/definitions/Link"
+        },
+        {
+          "$ref": "#/definitions/Blank"
         }
       ]
     },
