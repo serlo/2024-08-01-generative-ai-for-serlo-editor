@@ -30,7 +30,7 @@ interface Exercise {
     /**
      * The responses, either of type scMcExercise or inputExercise
      */
-    interactive?: ScMcExercise
+    interactive?: ScMcExercise | InputExercise
   }
 }
 
@@ -62,6 +62,48 @@ interface ScMcExercise {
       isCorrect: false
       /**
        * text feedback for the user when this solution is selected
+       */
+      feedback: RichText
+    }[]
+  }
+}
+
+/**
+ * An input exercise where the user has to enter a text, number or mathematical expression which is the right solution.
+ */
+interface InputExercise {
+  plugin: 'inputExercise'
+
+  /**
+   * The input exercise contains only the response part of the
+   * exercise (the task is a separate content)
+   */
+  state: {
+    /**
+     * response type: either text, number or mathematical expression
+     */
+    type:
+      | 'input-number-exact-match-challenge'
+      | 'input-expression-equal-match-challenge'
+      | 'input-string-normalized-match-challenge'
+    /**
+     * option to specifiy unit for answer (e.g. "kg")
+     */
+    unit: string
+    /**
+     * multiple answers can be entered
+     */
+    answers: {
+      /**
+       * the answer as a string
+       */
+      value: string
+      /**
+       * whether the given answer is correct
+       */
+      isCorrect: boolean
+      /**
+       * customizable text feedback for the user, e.g. "Well done!"
        */
       feedback: RichText
     }[]
