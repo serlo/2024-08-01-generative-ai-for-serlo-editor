@@ -59,6 +59,14 @@ function App() {
   const [prompt, setPrompt] = React.useState('Vereinfache den Text')
   const [model, setModel] = React.useState(Model.GPT_4O)
   const [openAIResponse, setOpenAIResponse] = React.useState<unknown>(null)
+  const [costState, setCostState] = React.useState({
+    cost: 0,
+    costOfLastCall: 0,
+    inputTokens: 0,
+    outputTokens: 0,
+    inputTokensOfLastCall: 0,
+    outputTokensOfLastCall: 0,
+  })
 
   React.useEffect(() => {
     interface StateType {
@@ -127,10 +135,34 @@ function App() {
 
       const backendResponse = await response.json()
 
+      const {
+        prompt_tokens: inputTokensOfLastCall,
+        completion_tokens: outputTokensOfLastCall,
+      } = backendResponse.openAIResponse.usage
+
+      const { input, output } = getPrice(model)
+
+      const costOfLastCall =
+        (input * inputTokensOfLastCall) / 1e6 +
+        (output * outputTokensOfLastCall) / 1e6
+
+      setCostState((prev) => {
+        return {
+          cost: prev.cost + costOfLastCall,
+          costOfLastCall,
+          inputTokens: costState.inputTokens + inputTokensOfLastCall,
+          outputTokens: costState.outputTokens + outputTokensOfLastCall,
+          inputTokensOfLastCall,
+          outputTokensOfLastCall,
+        }
+      })
+
       setOpenAIResponse(backendResponse.openAIResponse)
       setOutputContent(JSON.parse(backendResponse.content))
     },
   })
+
+  const { input, output } = getPrice(model)
 
   return (
     <>
@@ -211,6 +243,21 @@ function App() {
           <SerloRenderer document={outputContent} />
         </FlexItem>
         <FlexItem>
+          <Heading>Costs</Heading>
+          <p>
+            Price of current model: Input={input}$/1M tokens, Output={output}
+            $/1M tokens{' '}
+          </p>
+          <hr className="my-2" />
+          <p>Costs of the last call: {costState.costOfLastCall}$</p>
+          <p>Input tokens of last call: {costState.inputTokensOfLastCall}</p>
+          <p>Output tokens of last call: {costState.outputTokensOfLastCall}</p>
+          <hr className="my-2" />
+          <p>Costs for the current session: {costState.cost}$</p>
+          <p>Input tokens of current session: {costState.inputTokens}</p>
+          <p>Output tokens of current session: {costState.outputTokens}</p>
+        </FlexItem>
+        <FlexItem>
           <div className="overflow-x-auto">
             <Heading>Response from Backend</Heading>
             {fetchContent.isPending ? <Spinner /> : null}
@@ -262,5 +309,20 @@ function toText(obj: unknown): string {
     return Object.values(obj).map(toText).join('')
   } else {
     return ''
+  }
+}
+
+function getPrice(model: Model) {
+  switch (model) {
+    case Model.GPT_4O:
+      return { input: 5, output: 15 }
+    case Model.GPT_4O_MINI:
+      return { input: 0.15, output: 0.6 }
+    case Model.GPT_3_5_TURBO:
+      return { input: 0.5, output: 1.5 }
+    case Model.GPT_4:
+      return { input: 30, output: 60 }
+    case Model.GPT_4_TURBO:
+      return { input: 10, output: 30 }
   }
 }
