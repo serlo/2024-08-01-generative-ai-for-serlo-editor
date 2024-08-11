@@ -48,12 +48,52 @@ export default function Home() {
 
 function App() {
   const password = '123456'
+  const firstLoad = React.useRef(true)
   const [inputContent, setInputContent] = React.useState<Content>(initialState)
   const [outputContent, setOutputContent] =
     React.useState<Content>(initialState)
   const [prompt, setPrompt] = React.useState('Vereinfache den Text')
   const [model, setModel] = React.useState(Model.GPT_4O)
   const [openAIResponse, setOpenAIResponse] = React.useState<unknown>(null)
+
+  React.useEffect(() => {
+    interface StateType {
+      inputContent: Content
+      outputContent: Content
+      prompt: string
+      model: Model
+    }
+
+    if (firstLoad.current) {
+      firstLoad.current = false
+      const urlParams = new URLSearchParams(window.location.search)
+      const encodedState = urlParams.get('state')
+      if (encodedState) {
+        try {
+          const decodedState = atob(encodedState)
+          const parsedState: StateType = JSON.parse(decodedState)
+
+          setInputContent(parsedState.inputContent)
+          setOutputContent(parsedState.outputContent)
+          setPrompt(parsedState.prompt)
+          setModel(parsedState.model)
+        } catch (error) {
+          console.error('Failed to decode or parse state from URL:', error)
+        }
+      }
+    } else {
+      const state: StateType = {
+        inputContent,
+        outputContent,
+        prompt,
+        model,
+      }
+      const encodedState = btoa(JSON.stringify(state))
+      const url = new URL(window.location.href)
+      url.searchParams.set('state', encodedState)
+      window.history.replaceState({}, '', url.toString())
+    }
+  }, [inputContent, model, outputContent, prompt])
 
   const fetchContent = useMutation({
     mutationFn: async ({
