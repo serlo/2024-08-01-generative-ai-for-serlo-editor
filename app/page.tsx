@@ -18,6 +18,8 @@ import {
   QueryClientProvider,
   useMutation,
 } from '@tanstack/react-query'
+import LoginForm from './components/login-form'
+import { PasswordContext } from './hooks/password-context'
 
 const queryClient = new QueryClient()
 
@@ -38,16 +40,18 @@ export default function Home() {
   return (
     <Theme>
       <QueryClientProvider client={queryClient}>
-        <main className="p-5">
-          <App />
-        </main>
+        <LoginForm>
+          <main className="p-5">
+            <App />
+          </main>
+        </LoginForm>
       </QueryClientProvider>
     </Theme>
   )
 }
 
 function App() {
-  const password = '123456'
+  const password = React.useContext(PasswordContext)
   const firstLoad = React.useRef(true)
   const [inputContent, setInputContent] = React.useState<Content>(initialState)
   const [outputContent, setOutputContent] =
