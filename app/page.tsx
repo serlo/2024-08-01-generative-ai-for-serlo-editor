@@ -53,7 +53,7 @@ function App() {
     React.useState<Content>(initialState)
   const [prompt, setPrompt] = React.useState('Vereinfache den Text')
   const [model, setModel] = React.useState(Model.GPT_4O)
-  const [backendResponse, setBackendResponse] = React.useState<unknown>(null)
+  const [openAIResponse, setOpenAIResponse] = React.useState<unknown>(null)
 
   const fetchContent = useMutation({
     mutationFn: async ({
@@ -83,7 +83,7 @@ function App() {
 
       const backendResponse = await response.json()
 
-      setBackendResponse(backendResponse)
+      setOpenAIResponse(backendResponse.openAIResponse)
       setOutputContent(JSON.parse(backendResponse.content))
     },
   })
@@ -167,9 +167,18 @@ function App() {
           <SerloRenderer document={outputContent} />
         </FlexItem>
         <FlexItem>
-          <Heading>Response from Backend</Heading>
-          {fetchContent.isPending ? <Spinner /> : null}
-          <pre>{JSON.stringify(backendResponse, null, 2)}</pre>
+          <div className="overflow-x-auto">
+            <Heading>Response from Backend</Heading>
+            {fetchContent.isPending ? <Spinner /> : null}
+            <Heading as="h2" size="4">
+              Content
+            </Heading>
+            <pre>{JSON.stringify(outputContent, null, 2)}</pre>
+            <Heading as="h2" size="4">
+              OpenAI Response
+            </Heading>
+            <pre>{JSON.stringify(openAIResponse, null, 2)}</pre>
+          </div>
         </FlexItem>
       </Flex>
     </>
