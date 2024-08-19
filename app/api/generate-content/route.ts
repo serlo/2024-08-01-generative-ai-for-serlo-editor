@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { OpenAI } from 'openai'
 
+export const maxDuration = 100
+
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 const systemPrompt = `You are tasked with generating educational content in JSON format based on a given JSON schema and input JSON. Your goal is to create content that adheres to the provided schema while incorporating information from the input JSON.
