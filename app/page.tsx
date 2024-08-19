@@ -108,13 +108,7 @@ function App() {
   }, [inputContent, model, outputContent, prompt])
 
   const fetchContent = useMutation({
-    mutationFn: async ({
-      content,
-      prompt,
-    }: {
-      content: string
-      prompt: string
-    }) => {
+    mutationFn: async () => {
       const response = await fetch(
         createUrl({
           path: '/api/generate-content',
@@ -122,7 +116,9 @@ function App() {
             prompt,
             password,
             model,
-            ...(toText(content).trim().length > 0 ? { content } : {}),
+            ...(toText(inputContent).trim().length > 0
+              ? { content: JSON.stringify(inputContent) }
+              : {}),
           },
         }),
         { method: 'POST' },
@@ -225,12 +221,7 @@ function App() {
             </Form.Field>
           </Form.Root>
           <Button
-            onClick={() =>
-              fetchContent.mutate({
-                content: JSON.stringify(inputContent, null, 2),
-                prompt,
-              })
-            }
+            onClick={() => fetchContent.mutate()}
             disabled={fetchContent.isPending}
             className="mt-2"
           >
