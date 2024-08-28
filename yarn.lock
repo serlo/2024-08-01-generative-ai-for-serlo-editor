@@ -21,7 +21,7 @@ __metadata:
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.5"
     next: "npm:14.2.5"
-    openai: "npm:^4.54.0"
+    openai: "npm:^4.56.1"
     postcss: "npm:^8"
     prettier: "npm:^3.3.3"
     react: "npm:^18"
@@ -4450,9 +4450,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openai@npm:^4.54.0":
-  version: 4.54.0
-  resolution: "openai@npm:4.54.0"
+"openai@npm:^4.56.1":
+  version: 4.56.1
+  resolution: "openai@npm:4.56.1"
   dependencies:
     "@types/node": "npm:^18.11.18"
     "@types/node-fetch": "npm:^2.6.4"
@@ -4461,9 +4461,14 @@ __metadata:
     form-data-encoder: "npm:1.7.2"
     formdata-node: "npm:^4.3.2"
     node-fetch: "npm:^2.6.7"
+  peerDependencies:
+    zod: ^3.23.8
+  peerDependenciesMeta:
+    zod:
+      optional: true
   bin:
     openai: bin/cli
-  checksum: 10c0/d994ab214397a750f9f79d82ce5de7418b2106a2e8b26255a111803b6aa5a706728bf005b0dcb5e05c4639c80c1a7bdd39207d4c28ec2d0ab33ddba27269a873
+  checksum: 10c0/862e3dd57cf83c74ac1b428d5a223b26ef566ac9842ba9a55a39a1baf7cac9144244a606ce9262757d7e62aded7919890369f4d3f44ab26fe4d043dea5cadc82
   languageName: node
   linkType: hard
 

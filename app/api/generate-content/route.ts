@@ -61,7 +61,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     const openAIResponse = await openai.chat.completions.create({
-      model,
+      model:
+        model === 'gpt-4o'
+          ? 'gpt-4o-2024-08-06'
+          : model === 'gpt-4o-mini'
+            ? 'gpt-4o-mini-2024-07-18'
+            : model,
       messages: [
         { role: 'system', content: systemPrompt },
         ...(content == null
@@ -75,7 +80,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         { role: 'user', content: userPrompt },
       ],
       temperature: 0.25,
-      ...(model != 'gpt-4' ? { response_format: { type: 'json_object' } } : {}),
+      ...(model === 'gpt-4o' || model === 'gpt-4o-mini'
+        ? {
+            response_format: {
+              type: 'json_schema',
+              json_schema: {
+                schema: jsonSchema,
+                strict: true,
+                name: 'serlo-editor-content-format',
+              },
+            },
+          }
+        : model !== 'gpt-4'
+          ? { response_format: { type: 'json_object' } }
+          : {}),
     })
 
     return NextResponse.json({
