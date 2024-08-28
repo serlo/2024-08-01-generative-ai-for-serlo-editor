@@ -54,8 +54,7 @@ function App() {
   const password = React.useContext(PasswordContext)
   const firstLoad = React.useRef(true)
   const [inputContent, setInputContent] = React.useState<Content>(initialState)
-  const [outputContent, setOutputContent] =
-    React.useState<Content>(initialState)
+  const [outputContent, setOutputContent] = React.useState<Content | null>(null)
   const [prompt, setPrompt] = React.useState('Vereinfache den Text')
   const [model, setModel] = React.useState(Model.GPT_4O)
   const [openAIResponse, setOpenAIResponse] = React.useState<unknown>(null)
@@ -231,7 +230,7 @@ function App() {
         <FlexItem>
           <Heading>Output of the generative AI</Heading>
           {fetchContent.isPending ? <Spinner /> : null}
-          <SerloRenderer document={outputContent} />
+          <SerloRenderer document={outputContent ?? initialState} />
         </FlexItem>
         <FlexItem>
           <Heading>Costs</Heading>
