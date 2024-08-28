@@ -235,6 +235,7 @@ function App() {
         </FlexItem>
         <FlexItem>
           <Heading>Costs</Heading>
+          {fetchContent.isPending ? <Spinner /> : null}
           <p>
             Price of current model: Input={input}$/1M tokens, Output={output}
             $/1M tokens{' '}
