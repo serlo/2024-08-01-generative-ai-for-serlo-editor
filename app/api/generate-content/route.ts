@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { OpenAI } from 'openai'
 
-export const maxDuration = 100
+export const maxDuration = 300
 export const runtime = 'edge'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
