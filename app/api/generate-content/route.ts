@@ -60,27 +60,49 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const openAIResponse = await openai.chat.completions.create({
-      model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...(content == null
-          ? []
-          : [
-              {
-                role: 'user',
-                content: contentPrompt.replace('{{INPUT_JSON}}', content),
-              } as const,
-            ]),
-        { role: 'user', content: userPrompt },
-      ],
-      temperature: 0.25,
-      ...(model != 'gpt-4' ? { response_format: { type: 'json_object' } } : {}),
+    // Vercel returns an error when after 25s no content is send
+    // Thus we send a first space in order to avoid this error
+    const stream = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder()
+
+        controller.enqueue(encoder.encode(' '))
+
+        const openAIResponse = await openai.chat.completions.create({
+          model,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            ...(content == null
+              ? []
+              : [
+                  {
+                    role: 'user',
+                    content: contentPrompt.replace('{{INPUT_JSON}}', content),
+                  } as const,
+                ]),
+            { role: 'user', content: userPrompt },
+          ],
+          temperature: 0.25,
+          ...(model != 'gpt-4'
+            ? { response_format: { type: 'json_object' } }
+            : {}),
+        })
+
+        controller.enqueue(
+          encoder.encode(
+            JSON.stringify({
+              openAIResponse,
+              content: openAIResponse.choices[0]?.message?.content,
+            }),
+          ),
+        )
+
+        controller.close()
+      },
     })
 
-    return NextResponse.json({
-      openAIResponse,
-      content: openAIResponse.choices[0]?.message?.content,
+    return new NextResponse(stream, {
+      headers: { 'Content-Type': 'application/json' },
     })
   } catch (error) {
     console.error('Error fetching suggestion:', error)
