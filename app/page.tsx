@@ -70,7 +70,7 @@ function App() {
   React.useEffect(() => {
     interface StateType {
       inputContent: Content
-      outputContent: Content
+      outputContent: Content | null
       prompt: string
       model: Model
     }
