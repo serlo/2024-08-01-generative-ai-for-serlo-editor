@@ -163,10 +163,11 @@ function App() {
     <>
       <Flex gap="3" wrap="wrap">
         <FlexItem>
-          <Heading>Input for the generative AI</Heading>
+          <Heading>Optional: Input for the generative AI</Heading>
           <p className="mt-2">
             Enter content for generative AI in the following editor component.
-            Leave it empty when you do not want to send any text as an input:
+            Leave it empty when you do not want to send any additional content
+            as an input:
           </p>
           <SerloEditor
             initialState={inputContent}
@@ -184,9 +185,6 @@ function App() {
               return <>{editor.element}</>
             }}
           </SerloEditor>
-        </FlexItem>
-        <FlexItem>
-          <Heading>Settings for the generative AI</Heading>
           <Form.Root>
             <Form.Field name="prompt">
               <Form.Label>User Prompt:</Form.Label>
