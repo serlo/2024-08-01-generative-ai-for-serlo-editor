@@ -82,7 +82,7 @@ function App() {
       const encodedState = urlParams.get('state')
       if (encodedState) {
         try {
-          const decodedState = atob(encodedState)
+          const decodedState = decodeURIComponent(atob(encodedState))
           const parsedState: StateType = JSON.parse(decodedState)
 
           setInputContent(parsedState.inputContent)
@@ -100,7 +100,7 @@ function App() {
         prompt,
         model,
       }
-      const encodedState = btoa(JSON.stringify(state))
+      const encodedState = btoa(encodeURIComponent(JSON.stringify(state)))
       const url = new URL(window.location.href)
       url.searchParams.set('state', encodedState)
       window.history.replaceState({}, '', url.toString())
