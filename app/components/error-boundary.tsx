@@ -19,6 +19,10 @@ class ErrorBoundary extends Component<
     console.error('ErrorBoundary caught an error', error, info)
   }
 
+  componentDidUpdate({ children }: { children: ReactNode }): void {
+    if (children !== this.props.children) this.setState({ error: null })
+  }
+
   render() {
     if (this.state.error !== null) {
       // You can render any custom fallback UI
