@@ -19,6 +19,7 @@ import {
   useMutation,
 } from '@tanstack/react-query'
 import LoginForm from './components/login-form'
+import ErrorBoundary from './components/error-boundary'
 import { PasswordContext } from './hooks/password-context'
 
 const queryClient = new QueryClient()
@@ -228,7 +229,9 @@ function App() {
         <FlexItem>
           <Heading>Output of the generative AI</Heading>
           {fetchContent.isPending ? <Spinner /> : null}
-          <SerloRenderer document={outputContent ?? initialState} />
+          <ErrorBoundary>
+            <SerloRenderer document={outputContent ?? initialState} />
+          </ErrorBoundary>
         </FlexItem>
         <FlexItem>
           <Heading>Costs</Heading>
