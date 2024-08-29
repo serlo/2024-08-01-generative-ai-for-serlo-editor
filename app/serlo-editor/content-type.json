@@ -14,24 +14,17 @@
           "type": "string"
         },
         "children": {
-          "description": "The children of the blank, which is the correct answer for this blank.",
+          "description": "The correct answer for this blank.",
           "items": {
-            "anyOf": [
-              {
-                "$ref": "#/definitions/CustomText"
-              },
-              {
-                "$ref": "#/definitions/MathElement"
-              }
-            ]
+            "$ref": "#/definitions/CustomText"
           },
           "type": "array"
         },
-        "correctAnswer": {
+        "correctAnswers": {
           "description": "List of correct answers for this blank.",
           "items": {
             "properties": {
-              "anser": {
+              "answer": {
                 "type": "string"
               }
             },

@@ -408,9 +408,9 @@ interface Blank {
   type: 'textBlank'
 
   /**
-   * The children of the blank, which is the correct answer for this blank.
+   * The correct answer for this blank.
    */
-  children: (CustomText | MathElement)[]
+  children: CustomText[]
 
   /**
    * The unique identifier for the blank.
@@ -420,7 +420,7 @@ interface Blank {
   /**
    * List of correct answers for this blank.
    */
-  correctAnswer: { anser: string }[]
+  correctAnswers: { answer: string }[]
 
   /**
    * Optional: Specifies whether math equivalents are accepted.
