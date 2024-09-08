@@ -19,6 +19,7 @@ import {
   useMutation,
 } from '@tanstack/react-query'
 import LoginForm from './components/login-form'
+import ErrorBoundary from './components/error-boundary'
 import { PasswordContext } from './hooks/password-context'
 
 const queryClient = new QueryClient()
@@ -54,8 +55,7 @@ function App() {
   const password = React.useContext(PasswordContext)
   const firstLoad = React.useRef(true)
   const [inputContent, setInputContent] = React.useState<Content>(initialState)
-  const [outputContent, setOutputContent] =
-    React.useState<Content>(initialState)
+  const [outputContent, setOutputContent] = React.useState<Content | null>(null)
   const [prompt, setPrompt] = React.useState('Vereinfache den Text')
   const [model, setModel] = React.useState(Model.GPT_4O)
   const [openAIResponse, setOpenAIResponse] = React.useState<unknown>(null)
@@ -71,7 +71,7 @@ function App() {
   React.useEffect(() => {
     interface StateType {
       inputContent: Content
-      outputContent: Content
+      outputContent: Content | null
       prompt: string
       model: Model
     }
@@ -82,7 +82,7 @@ function App() {
       const encodedState = urlParams.get('state')
       if (encodedState) {
         try {
-          const decodedState = atob(encodedState)
+          const decodedState = decodeURIComponent(atob(encodedState))
           const parsedState: StateType = JSON.parse(decodedState)
 
           setInputContent(parsedState.inputContent)
@@ -100,7 +100,7 @@ function App() {
         prompt,
         model,
       }
-      const encodedState = btoa(JSON.stringify(state))
+      const encodedState = btoa(encodeURIComponent(JSON.stringify(state)))
       const url = new URL(window.location.href)
       url.searchParams.set('state', encodedState)
       window.history.replaceState({}, '', url.toString())
@@ -164,10 +164,11 @@ function App() {
     <>
       <Flex gap="3" wrap="wrap">
         <FlexItem>
-          <Heading>Input for the generative AI</Heading>
+          <Heading>Optional: Input for the generative AI</Heading>
           <p className="mt-2">
             Enter content for generative AI in the following editor component.
-            Leave it empty when you do not want to send any text as an input:
+            Leave it empty when you do not want to send any additional content
+            as an input:
           </p>
           <SerloEditor
             initialState={inputContent}
@@ -185,9 +186,6 @@ function App() {
               return <>{editor.element}</>
             }}
           </SerloEditor>
-        </FlexItem>
-        <FlexItem>
-          <Heading>Settings for the generative AI</Heading>
           <Form.Root>
             <Form.Field name="prompt">
               <Form.Label>User Prompt:</Form.Label>
@@ -231,10 +229,13 @@ function App() {
         <FlexItem>
           <Heading>Output of the generative AI</Heading>
           {fetchContent.isPending ? <Spinner /> : null}
-          <SerloRenderer document={outputContent} />
+          <ErrorBoundary>
+            <SerloRenderer document={outputContent ?? initialState} />
+          </ErrorBoundary>
         </FlexItem>
         <FlexItem>
           <Heading>Costs</Heading>
+          {fetchContent.isPending ? <Spinner /> : null}
           <p>
             Price of current model: Input={input}$/1M tokens, Output={output}
             $/1M tokens{' '}
