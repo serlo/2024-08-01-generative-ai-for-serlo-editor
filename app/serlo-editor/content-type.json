@@ -1,7 +1,15 @@
 {
-  "$ref": "#/definitions/ListOfContent",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "Answer": {
+      "properties": {
+        "answer": {
+          "description": "The answer to the question.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Blank": {
       "description": "Represents a blank space in the editor in a blank exercise.",
       "properties": {
@@ -23,12 +31,7 @@
         "correctAnswers": {
           "description": "List of correct answers for this blank.",
           "items": {
-            "properties": {
-              "answer": {
-                "type": "string"
-              }
-            },
-            "type": "object"
+            "$ref": "#/definitions/Answer"
           },
           "type": "array"
         },
@@ -52,12 +55,7 @@
             "extraDraggableAnswers": {
               "description": "Optional list of extra draggable answers which are all wrong for a drag & drop exercise.",
               "items": {
-                "properties": {
-                  "answer": {
-                    "type": "string"
-                  }
-                },
-                "type": "object"
+                "$ref": "#/definitions/Answer"
               },
               "type": "array"
             },
@@ -86,7 +84,7 @@
         "state": {
           "properties": {
             "content": {
-              "$ref": "#/definitions/ListOfContent"
+              "$ref": "#/definitions/SecondLevelListOfContent"
             },
             "title": {
               "$ref": "#/definitions/RichText"
@@ -164,6 +162,15 @@
       },
       "type": "object"
     },
+    "EmptyText": {
+      "properties": {
+        "text": {
+          "const": "",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Equations": {
       "description": "Represents the Equations plugin.",
       "properties": {
@@ -206,7 +213,7 @@
         "state": {
           "properties": {
             "content": {
-              "$ref": "#/definitions/ListOfContent",
+              "$ref": "#/definitions/SecondLevelListOfContent",
               "description": "The axtucal task / exercise"
             },
             "interactive": {
@@ -298,6 +305,7 @@
       "type": "object"
     },
     "Image": {
+      "description": "Represents the Image plugin.",
       "properties": {
         "plugin": {
           "const": "image",
@@ -355,21 +363,7 @@
             "answers": {
               "description": "multiple answers can be entered",
               "items": {
-                "properties": {
-                  "feedback": {
-                    "$ref": "#/definitions/RichText",
-                    "description": "customizable text feedback for the user, e.g. \"Well done!\""
-                  },
-                  "isCorrect": {
-                    "description": "whether the given answer is correct",
-                    "type": "boolean"
-                  },
-                  "value": {
-                    "description": "the answer as a string",
-                    "type": "string"
-                  }
-                },
-                "type": "object"
+                "$ref": "#/definitions/InputExerciseAnswer"
               },
               "type": "array"
             },
@@ -392,19 +386,29 @@
       },
       "type": "object"
     },
+    "InputExerciseAnswer": {
+      "properties": {
+        "feedback": {
+          "$ref": "#/definitions/RichText",
+          "description": "customizable text feedback for the user, e.g. \"Well done!\""
+        },
+        "isCorrect": {
+          "description": "whether the given answer is correct",
+          "type": "boolean"
+        },
+        "value": {
+          "description": "the answer as a string",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Link": {
       "description": "A link similar to an <a> tag in HTML.",
       "properties": {
         "children": {
           "items": {
-            "anyOf": [
-              {
-                "$ref": "#/definitions/CustomText"
-              },
-              {
-                "$ref": "#/definitions/MathElement"
-              }
-            ]
+            "$ref": "#/definitions/CustomText"
           },
           "type": "array"
         },
@@ -423,44 +427,12 @@
       "description": "A list item similar to an <li> tag in HTML.",
       "properties": {
         "children": {
-          "anyOf": [
-            {
-              "items": [
-                {
-                  "$ref": "#/definitions/ListItemText"
-                }
-              ],
-              "maxItems": 1,
-              "minItems": 1,
-              "type": "array"
-            },
-            {
-              "items": [
-                {
-                  "$ref": "#/definitions/ListItemText"
-                },
-                {
-                  "$ref": "#/definitions/UnorderedList"
-                }
-              ],
-              "maxItems": 2,
-              "minItems": 2,
-              "type": "array"
-            },
-            {
-              "items": [
-                {
-                  "$ref": "#/definitions/ListItemText"
-                },
-                {
-                  "$ref": "#/definitions/OrderedList"
-                }
-              ],
-              "maxItems": 2,
-              "minItems": 2,
-              "type": "array"
-            }
-          ]
+          "items": {
+            "$ref": "#/definitions/ListItemText"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
         },
         "type": {
           "const": "list-item",
@@ -485,29 +457,15 @@
       },
       "type": "object"
     },
-    "ListOfContent": {
-      "description": "A list of content elements like boy, richtext or exercises...",
-      "properties": {
-        "plugin": {
-          "const": "rows",
-          "type": "string"
-        },
-        "state": {
-          "items": {
-            "$ref": "#/definitions/ContentType"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
     "MathElement": {
       "description": "A math element similar to a <math> tag in HTML.",
       "properties": {
         "children": {
           "items": {
-            "$ref": "#/definitions/CustomText"
+            "$ref": "#/definitions/EmptyText"
           },
+          "maxItems": 1,
+          "minItems": 1,
           "type": "array"
         },
         "inline": {
@@ -542,7 +500,7 @@
       "description": "Represents the state of the Multimedia plugin.",
       "properties": {
         "explanation": {
-          "$ref": "#/definitions/ListOfContent"
+          "$ref": "#/definitions/SecondLevelListOfContent"
         },
         "illustrating": {
           "type": "boolean"
@@ -628,22 +586,7 @@
             "answers": {
               "description": "multiple answers can be entered",
               "items": {
-                "properties": {
-                  "content": {
-                    "$ref": "#/definitions/RichText",
-                    "description": "each answer contains a text content"
-                  },
-                  "feedback": {
-                    "$ref": "#/definitions/RichText",
-                    "description": "text feedback for the user when this solution is selected"
-                  },
-                  "isCorrect": {
-                    "const": false,
-                    "description": "flag whether answer is correct or false",
-                    "type": "boolean"
-                  }
-                },
-                "type": "object"
+                "$ref": "#/definitions/ScMcExerciseAnswer"
               },
               "type": "array"
             },
@@ -654,6 +597,58 @@
             }
           },
           "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "ScMcExerciseAnswer": {
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/RichText",
+          "description": "each answer contains a text content"
+        },
+        "feedback": {
+          "$ref": "#/definitions/RichText",
+          "description": "text feedback for the user when this solution is selected"
+        },
+        "isCorrect": {
+          "const": false,
+          "description": "flag whether answer is correct or false",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "SecondLevelContentType": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/RichText"
+        },
+        {
+          "$ref": "#/definitions/Video"
+        },
+        {
+          "$ref": "#/definitions/Image"
+        },
+        {
+          "$ref": "#/definitions/Table"
+        },
+        {
+          "$ref": "#/definitions/SerloInjection"
+        }
+      ]
+    },
+    "SecondLevelListOfContent": {
+      "properties": {
+        "plugin": {
+          "const": "rows",
+          "type": "string"
+        },
+        "state": {
+          "items": {
+            "$ref": "#/definitions/SecondLevelContentType"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -725,7 +720,7 @@
               "type": "object"
             },
             "steps": {
-              "$ref": "#/definitions/ListOfContent",
+              "$ref": "#/definitions/SecondLevelListOfContent",
               "description": "the solution is structured into different steps where each step can contain text, images or other content types"
             },
             "strategy": {
@@ -746,7 +741,8 @@
           "type": "string"
         },
         "state": {
-          "$ref": "#/definitions/SpoilerState"
+          "$ref": "#/definitions/SpoilerState",
+          "description": "The state of the Spoiler plugin."
         }
       },
       "type": "object"
@@ -755,9 +751,11 @@
       "description": "Represents the state of the Spoiler plugin.",
       "properties": {
         "content": {
-          "$ref": "#/definitions/ListOfContent"
+          "$ref": "#/definitions/SecondLevelListOfContent",
+          "description": "The content of the spoiler."
         },
         "title": {
+          "description": "The title of the spoiler.",
           "type": "string"
         }
       },
@@ -794,30 +792,9 @@
         "state": {
           "properties": {
             "rows": {
-              "items": [
-                {
-                  "properties": {
-                    "columns": {
-                      "items": [
-                        {
-                          "properties": {
-                            "content": {
-                              "$ref": "#/definitions/RichText"
-                            }
-                          },
-                          "type": "object"
-                        }
-                      ],
-                      "maxItems": 1,
-                      "minItems": 1,
-                      "type": "array"
-                    }
-                  },
-                  "type": "object"
-                }
-              ],
-              "maxItems": 1,
-              "minItems": 1,
+              "items": {
+                "$ref": "#/definitions/TableRow"
+              },
               "type": "array"
             },
             "tableType": {
@@ -825,6 +802,25 @@
             }
           },
           "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "TableCell": {
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/RichText"
+        }
+      },
+      "type": "object"
+    },
+    "TableRow": {
+      "properties": {
+        "columns": {
+          "items": {
+            "$ref": "#/definitions/TableCell"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -869,5 +865,18 @@
       "type": "object"
     }
   },
-  "description": "A list of content elements like boy, richtext or exercises..."
+  "description": "A list of content elements like boy, richtext or exercises...",
+  "properties": {
+    "plugin": {
+      "const": "rows",
+      "type": "string"
+    },
+    "state": {
+      "items": {
+        "$ref": "#/definitions/ContentType"
+      },
+      "type": "array"
+    }
+  },
+  "type": "object"
 }
