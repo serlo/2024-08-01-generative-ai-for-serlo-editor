@@ -86,7 +86,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
               type: 'json_schema',
               json_schema: {
                 schema: jsonSchema,
-                strict: true,
                 name: 'serlo-editor-content-format',
               },
             },
