@@ -12,3 +12,13 @@ generative AI model.
 3. Copy .env.example to .env and fill in the required values
 4. Run the server with `yarn dev`
 5. Open the editor at `http://localhost:3000`
+
+## Funding
+
+<img src="https://github.com/serlo/.github/blob/main/assets/eu.png?raw=true" alt="Logo European Commission" title="European Comission" align="right" height="150" />
+<img src="https://github.com/serlo/.github/blob/main/assets/bmbf.png?raw=true" alt="Logo BMBF" title="BMBF" align="right" height="150" />
+
+The project covered by this report has been financed by public means granted by
+the German Ministry for Education and Research under the funding code LENABI2.
+The responsibility for the content of this publication lies solely with the
+author.
